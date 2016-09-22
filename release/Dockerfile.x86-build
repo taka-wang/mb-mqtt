@@ -1,0 +1,12 @@
+# x86
+FROM golang:x86-cache
+MAINTAINER Taka Wang <taka@cmwang.net>
+
+RUN echo " ... build" \
+        && git clone https://github.com/taka-wang/mb-socket.git $GOPATH/src/github.com/taka-wang/mb-socket \
+        && cd $GOPATH/src/github.com/taka-wang/mb-socket \
+        && go get github.com/eclipse/paho.mqtt.golang github.com/takawang/zmq3 github.com/taka-wang/psmb/viper-conf \
+        && go build -o mqtt -ldflags "-X github.com/taka-wang/psmb/viper-conf.envconf=CONF_SOCKET" main.go \
+        && cp mqtt /
+
+CMD /mqtt

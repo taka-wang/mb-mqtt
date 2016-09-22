@@ -1,0 +1,55 @@
+machine:
+    #timezone:
+    #    Asia/Taipei
+    services:
+        - docker
+
+dependencies:
+    override:
+        - sudo apt-get install -y --no-install-recommends python-dev mosquitto mosquitto-clients && sudo pip install --upgrade docker-compose==1.8.0
+
+test:
+    pre:
+        - docker version
+        - docker-compose version
+        #- docker build --no-cache=true -t conf   -f conf/Dockerfile.x86 .
+        #- docker build --no-cache=true -t worker -f worker/Dockerfile.x86 .
+        #- docker build --no-cache=true -t test   -f test/Dockerfile.x86 .
+    override:
+        #- ls
+        #- docker run -it conf
+        #- docker run -it worker
+        #- docker run -it test
+        #---------------------- PACKING -----------------------------------
+        # build cache
+        - docker build -t golang:x86-cache -f release/Dockerfile.x86-cache .
+        # build builder
+        - docker build -t builder:x86 --no-cache=true -f release/Dockerfile.x86-build .
+        - docker run -itd --name=builder builder:x86
+        # copy binary to release folder
+        - docker cp builder:/mqtt release/
+        # build release image
+        - docker build -t edgepro/mb-mqtt:x86 --no-cache=true -f release/Dockerfile.x86-pack release/.
+        #---------------------- SETUP TEST -------------------------------------
+        - docker-compose -f docker-compose.x86 up -d
+        - sleep 20
+        - mosquitto_pub -d -h iot.eclipse.org -i 1564 -t mydevice01/mbtcp/timeout.read/pub/1234512132 -m 'hello'
+        - sleep 2
+        - ./test.sh
+        #- mosquitto_pub -d -h iot.eclipse.org -i 1564 -t mydevice01/mbtcp/once.read/pub/1234512132 -m '{"fc": 1,"ip": "172.18.0.1","port": "502","slave": 1,"addr": 10,"data": 2}'
+        #- SLAVE=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mbsocket_slave_1)
+        #- mosquitto_pub -d -h iot.eclipse.org -i 1564 -t mydevice01/mbtcp/once.read/pub/1234512133 -m '{"fc": 1, "ip": "$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mbsocket_slave_1)", "port": "502", "slave": 1, "addr": 10, "data": 2}'
+        - sleep 2
+        - docker-compose -f docker-compose.x86 logs
+        - docker-compose -f docker-compose.x86 stop
+
+
+# publish to dockerhub
+#deployment:
+#    hub:
+#        branch: master
+#        commands:
+#            - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+#            - docker tag edgepro/mb-socket:x86 edgepro/mb-socket:latest
+#            - docker push edgepro/mb-socket:latest
+#            - docker push edgepro/mb-socket:x86

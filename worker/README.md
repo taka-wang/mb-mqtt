@@ -1,3 +1,3 @@
 # worker
 
-Worker package
+Subpackage worker is a zmq-based backend worker queue service.

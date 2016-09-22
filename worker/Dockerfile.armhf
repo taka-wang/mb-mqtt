@@ -1,0 +1,14 @@
+FROM takawang/gozmq:armhf
+MAINTAINER Taka Wang <taka@cmwang.net>
+
+ENV CONF_SOCKET "/etc/mb-socket"
+ENV EP_BACKEND "consul.cmwang.net:8500"
+
+RUN go get -u github.com/taka-wang/mb-socket && \
+    cd /go/src/github.com/taka-wang/mb-socket/worker && \
+    go get github.com/takawang/sugar
+
+WORKDIR /go/src/github.com/taka-wang/mb-socket/worker
+
+# cmd
+CMD ./test.sh

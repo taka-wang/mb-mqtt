@@ -1,0 +1,40 @@
+redis:
+    image: takawang/redis:x86
+    ports:
+        - "6379"
+
+mongodb:
+    image: mongo:3.2
+    ports:
+        - "27017"
+slave:
+    image: edgepro/c-modbus-slave:x86
+    ports:
+        - "502:502"
+        - "503:503"
+
+modbusd:
+    image: edgepro/modbusd:x86
+    volumes:
+        - /tmp:/tmp
+    links:
+        - slave
+
+psmbtcpsrv:
+    image: edgepro/psmb-srv:x86
+    volumes_from:
+        - modbusd
+    links:
+        - redis
+        - mongodb
+
+mbmqtt:
+    image: edgepro/mb-mqtt:x86
+    #ports:
+    #    - "1883:1883"
+    volumes_from:
+        - modbusd
+    links:
+        - slave:slave
+    volumes:
+        - /var/tmp:/var/tmp # mount for test

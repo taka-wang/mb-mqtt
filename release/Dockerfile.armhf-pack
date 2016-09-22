@@ -1,0 +1,16 @@
+# armhf
+FROM armv7/armhf-ubuntu:16.04
+MAINTAINER Taka Wang <taka@cmwang.net>
+
+ENV CONF_WEB "/etc/mb-web"
+ENV EP_BACKEND "consul.cmwang.net:8500"
+
+# add binary
+ADD libzmq.so.3.0.0 /usr/lib/
+ADD libzmq.so.3 /usr/lib/
+ADD web /usr/bin/
+ADD config.toml ${CONF_WEB}/
+
+EXPOSE 8080
+
+CMD /usr/bin/web

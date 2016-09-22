@@ -1,0 +1,117 @@
+# TOML config begin
+
+[log]
+debug       = true                      # log level
+json        = false                     # json formatter flag
+to_file     = false                     # log to file flag
+filename    = "/var/log/mb-web.log"     # log file location
+
+[psmbtcp]
+default_port            = "502"         # modbus slave default port
+min_connection_timeout  = 200000        # minimal tcp connection timeout in ms
+
+
+[worker]
+
+pub                     = "ipc:///tmp/to.psmb"      # publish endpoint
+sub                     = "ipc:///tmp/from.psmb"    # subscribe endpoint
+timeout                 = 1000          # http response timeout in ms for zmq request
+max_worker              = 6             # max number of worker pool
+max_queue               = 100           # max number of task queue
+
+[mqtt]
+
+# route version
+version                         = "0.0.1"
+
+# who am I for backend
+iam                             = "mqtt"
+
+# device id
+deviceid                        = "mydevice01"
+
+# "scheme" is one of "tcp", "ssl", or "ws"
+scheme                          = "tcp"
+
+# "host" is the ip-address (or hostname)
+host                            = "iot.eclipse.org"
+#host                           = "broker.hivemq.com"
+
+# "port" is the port on which the broker is accepting connections
+port                            = 1883
+
+# The username to be used by this client when connecting to the MQTT broker. 
+# Note: without the use of SSL/TLS, this information will
+# be sent in plaintext accross the wire.
+username                        = ""
+
+# The password to be used by this client when connecting to the MQTT broker. 
+# Note: without the use of SSL/TLS, this information will
+# be sent in plaintext accross the wire.
+password                        = ""
+
+# QoS level: 
+# 0: almost once
+# 1: at least once
+# 2: exactly once
+pub_qos                         = 1
+sub_qos                         = 1
+
+# The "clean session" flag in the connect message
+# when this client connects to an MQTT broker. By setting this flag, you are
+# indicating that no messages saved by the broker for this client should be
+# delivered. Any messages that were going to be sent by this client before
+# diconnecting previously but didn't will not be sent upon connecting to the broker.
+enable_clean_session            = true
+
+# the message routing to guarantee order within
+# each QoS level. By default, this value is true. If set to false,
+# this flag indicates that messages can be delivered asynchronously
+# from the client to the application and possibly arrive out of order.
+ensure_order                    = true
+
+# When the client connects, it will give this will message to the broker,
+# which will then publish the provided payload (the will) to any clients 
+# that are subscribed to the provided topic.
+enable_will                     = false
+will_topic                      = ""
+will_payload                    = ""
+will_qos                        = 0
+will_retained                   = false
+
+# The amount of time (in seconds) that the client
+# should wait before sending a PING request to the broker. This will
+# allow the client to know that a connection has not been lost with the server.
+keep_alive_interval             = 30
+
+# The amount of time (in seconds) that the client
+# will wait after sending a PING request to the broker, before deciding
+# that the connection has been lost.
+wait_pong_timeout               = 10
+
+# How long the client will wait when trying to open a connection
+# to an MQTT server before timeing out and erroring the attempt. A duration of 0 never times out.
+# Currently only operational on TCP/TLS connections.
+connection_timeout              = 30
+
+# The maximum time that will be waited between reconnection attempts when connection is lost.
+max_reconnect_period            = 10
+
+# Whether the automatic reconnection logic should be used when the connection is lost,
+# even if disabled the ConnectionLostHandler is still called.
+enable_auto_reconnect           = true
+
+# Internal queue that holds messages while the client is temporairily offline,
+# allowing the application to publish when the client is reconnecting.
+# This setting is only valid if AutoReconnect is set to true, it is otherwise ignored.
+offline_publish_queue_size      = 1000
+
+# How long a mqtt publish should block until it unblocks with a
+# timeout error. A duration of 0 never times out.
+write_timeout                   = 30
+
+# Poller timeout
+sub_timeout                     = 30
+
+
+# TOML config end @20161004
