@@ -3,11 +3,11 @@ FROM cache:armhf
 MAINTAINER Taka Wang <taka@cmwang.net>
 
 RUN echo " ... build" \
-        && git clone https://github.com/taka-wang/mb-web.git $GOPATH/src/github.com/taka-wang/mb-web \
-        && cd $GOPATH/src/github.com/taka-wang/mb-web \
-        && go get github.com/go-zoo/bone github.com/takawang/zmq3 github.com/taka-wang/psmb/viper-conf \ 
-        && go build -o web -ldflags "-X github.com/taka-wang/psmb/viper-conf.envconf=CONF_WEB" main.go \
-        && cp web /
+        && git clone https://github.com/taka-wang/mb-socket.git $GOPATH/src/github.com/taka-wang/mb-socket \
+        && cd $GOPATH/src/github.com/taka-wang/mb-socket \
+        && go get github.com/eclipse/paho.mqtt.golang github.com/takawang/zmq3 github.com/taka-wang/psmb/viper-conf \
+        && go build -o mqtt -ldflags "-X github.com/taka-wang/psmb/viper-conf.envconf=CONF_SOCKET" main.go \
+        && cp mqtt /
 
-CMD /web
+CMD /mqtt
 

@@ -2,15 +2,15 @@
 FROM armv7/armhf-ubuntu:16.04
 MAINTAINER Taka Wang <taka@cmwang.net>
 
-ENV CONF_WEB "/etc/mb-web"
+ENV CONF_SOCKET "/etc/mb-socket"
 ENV EP_BACKEND "consul.cmwang.net:8500"
 
 # add binary
 ADD libzmq.so.3.0.0 /usr/lib/
 ADD libzmq.so.3 /usr/lib/
-ADD web /usr/bin/
-ADD config.toml ${CONF_WEB}/
+ADD mqtt /usr/bin/
+ADD config.toml ${CONF_SOCKET}/
 
-EXPOSE 8080
+#EXPOSE 1883
 
-CMD /usr/bin/web
+CMD /usr/bin/mqtt

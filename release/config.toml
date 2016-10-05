@@ -34,8 +34,9 @@ deviceid                        = "mydevice01"
 scheme                          = "tcp"
 
 # "host" is the ip-address (or hostname)
-host                            = "iot.eclipse.org"
-#host                           = "broker.hivemq.com"
+#host                            = "iot.eclipse.org"
+host                           = "aws.cmwang.net"
+#host = "127.0.0.1"
 
 # "port" is the port on which the broker is accepting connections
 port                            = 1883

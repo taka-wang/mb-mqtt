@@ -19,10 +19,7 @@ func init() {
 	chanReq = make(chan [3]string, 100)  // non-blocking
 	chanResp = make(chan [3]string, 100) // non-blocking
 	// tester
-	opts := &MQTT.ClientOptions{
-		ClientID: "hello-12345",
-	}
-	opts.AddBroker(brokerURL)
+	opts := MQTT.NewClientOptions().AddBroker(brokerURL).SetClientID("hello-12345").SetCleanSession(true)
 	client = MQTT.NewClient(opts)
 }
 

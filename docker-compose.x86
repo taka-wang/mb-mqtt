@@ -27,11 +27,13 @@ psmbtcpsrv:
     links:
         - redis
         - mongodb
+#broker:
+#    image: ansi/mosquitto:latest
+#    ports:
+#        - "1883:1883"
 
 mbmqtt:
     image: edgepro/mb-mqtt:x86
-    #ports:
-    #    - "1883:1883"
     volumes_from:
         - modbusd
     links:

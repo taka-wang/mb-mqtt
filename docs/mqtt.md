@@ -307,8 +307,8 @@
             "port": "502",
             "slave": 1,
             "addr": 10,
-            "hex": true,
-            "data": "ABCD"
+            "len": 4,
+            "data": [1,0,1,0]
         }
     ```
 

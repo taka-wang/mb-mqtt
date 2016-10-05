@@ -1,6 +1,6 @@
 package mqroute
 
-// route path
+// mqtt route path
 const (
 	mbtcpOnceRead       = "once.read"
 	mbtcpOnceWrite      = "once.write"

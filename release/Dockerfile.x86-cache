@@ -1,5 +1,5 @@
 # x86
-FROM golang:1.7-alpine
+FROM golang:1.7.1-alpine
 MAINTAINER Taka Wang <taka@cmwang.net>
 ENV ZMQ_VERSION 3.2.5
 
